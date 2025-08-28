@@ -49,7 +49,6 @@
   </style>
   <script>
     // 🔗 1) Pega aquí el ENLACE COMPARTIDO de tu carpeta de Google Drive
-    //    (Asegúrate de que esté en "Cualquier persona con el enlace - Lector")
     const DRIVE_URL = "https://drive.google.com/drive/folders/15WFnkNIELi74ql96u-mDAiwsszvhI98L?usp=drive_link";
 
     // ⏱️ 2) Cambia cuántos segundos quieres mostrar el mensaje antes de entrar
@@ -72,16 +71,33 @@
       }, 1000);
     }
 
-    window.addEventListener('DOMContentLoaded', startCountdown);
+    window.addEventListener('DOMContentLoaded', () => {
+      startCountdown();
+      // Intentar reproducir audio al cargar (puede requerir interacción del usuario en algunos navegadores)
+      const audio = document.getElementById("audioBienvenida");
+      if (audio) {
+        audio.play().catch(()=>{
+          console.log("El navegador bloqueó el autoplay. El audio se reproducirá al hacer clic.");
+        });
+      }
+    });
+
+    function playWelcome(){
+      document.getElementById('audioBienvenida').play();
+      goNow();
+    }
   </script>
 </head>
 <body>
+  <!-- 🎵 Audio de bienvenida (sube tu archivo bienvenida.mp3 al mismo repo) -->
+  <audio id="audioBienvenida" src="bienvenida.mp3" preload="auto"></audio>
+
   <main class="card" role="main" aria-live="polite">
     <h1>¡Bienvenido!</h1>
     <p>Gracias por visitar. En unos <span id="countdown" class="count">5</span> segundos te llevaremos a la carpeta.</p>
     <p class="muted">Si prefieres no esperar, puedes entrar de inmediato con el botón:</p>
-    <button class="btn" onclick="goNow()">Entrar ahora</button>
-    <p class="footer muted">Si no eres redirigido automáticamente, <span class="link" onclick="goNow()">haz clic aquí</span>.</p>
+    <button class="btn" onclick="playWelcome()">Entrar ahora</button>
+    <p class="footer muted">Si no eres redirigido automáticamente, <span class="link" onclick="playWelcome()">haz clic aquí</span>.</p>
   </main>
 </body>
 </html>
